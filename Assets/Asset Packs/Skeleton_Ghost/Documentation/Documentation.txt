@@ -1,0 +1,50 @@
+	
+--------------Skeleton Ghost (Series #1)----------------------------
+
+This pack contains 3d Model and Animation's of "Skeleton Ghost" character.Comes with different skin variations.
+
+Technical Details:-
+				
+		- Vertex count : 8k(Body), 1.5k(Head_01)
+		- Tris count :  16k(Body),  3k(Head_01)
+		- Animations : 11 (Idle, Walk-1, Walk-2, Run, Attack-1, Attack-2, Hit-1, Hit-2, Death, Look Right, Look Left)
+		- Texture Variations : 3(Head), 4(Body)
+		- Shape variaton : 2(Head), 1(Body)
+		- Used Material(s) : Unity Standard Shader
+		- Texture maps : Albedo/Base Color
+		- Texture Size : 2048(.png)
+		- Simple colliders attached
+
+Features:-
+	- Low poly
+	- PBR HQ Textures
+	- Multiple animations for Walk, Hit & Attack for realistic gameplay
+	- Stylised model & textures
+	- Include shape variations for head
+	- Smooth animations	
+	- Easy to create new skin variations
+	- Mobile, AR supported
+
+Folder details:-
+
+	Materials : Where the materials for the model located.
+	
+	Meshes : Contain FBX format of the 3d model.
+	
+	Textures : Contains Textures, that are in (.PNG) file format
+	
+	(Other folders - Prefabs, Scenes, Animations)
+
+How to use:-
+	
+	Simply drag and drop the prefab to your scene and use it.
+	(Prefab(s) located under 
+	Asset > Skeleton_Ghost > Prefabs).
+
+..................................................................................
+
+About Us : "SR Studios Kerala", Game developing company located in Alappuzha, Kerala, India
+
+Contact : srstudioskerala@gmail.com
+
+................Thank you for downloading this package................................
