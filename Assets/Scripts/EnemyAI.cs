@@ -1,19 +1,26 @@
 
+using Pathfinding;
+using System;
+using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
 
 public class EnemyAI : MonoBehaviour
 {
-    GameObject target;
+    Transform target;
     NavMeshAgent agent;
     Animator _animation;
     Rigidbody rb;
     Health health;
-    CapsuleCollider collider;
+    Collider baseCollider;
     bool isAttacking = false;
+    bool isRagDollNotActive = true;
+    Collider[] ragdollCollider;
 
-
+    [SerializeField] float repathRate = 0.5f;
+    [SerializeField] bool reachedEndOfPath;
     [SerializeField] float AttackPower;
     [SerializeField] float chaseDistance;
     [SerializeField] float speed;
@@ -21,51 +28,93 @@ public class EnemyAI : MonoBehaviour
     {
         _animation = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        target = GameObject.FindWithTag("Player");
+        target = GameObject.FindWithTag("Player").GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
         health = GetComponent<Health>();
-        collider = GetComponent<CapsuleCollider>();
+        baseCollider = GetComponent<CapsuleCollider>();
+        ragdollCollider = GetComponentsInChildren<Collider>();
+
+        DisabaleRagdoll();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void DisabaleRagdoll()
+    {
+        if (baseCollider.enabled != true)
+        {
+            baseCollider.enabled = true;
+        }
+
+        foreach (var collider in ragdollCollider)
+        {
+            if (collider.gameObject != this.gameObject)
+            {
+                collider.isTrigger = true;
+
+            }
+        }
+    }
+
+    private void EnableRagdoll()
     {
 
+        //rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        _animation.enabled = false;
+        //agent.enabled = false;
+        _animation.avatar = null;
+        foreach (var collider in ragdollCollider)
+        {
+            if (collider.gameObject != this.gameObject)
+            {
+                collider.isTrigger = false;
+
+
+                collider.attachedRigidbody.velocity = Vector3.zero;
+                //collider.attachedRigidbody.AddForce(-transform.forward * 150);
+            }
+
+        }
+        isRagDollNotActive = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
 
+
+
+        if (health.isDead && isRagDollNotActive)
+        {
+            
+            EnableRagdoll();
+            baseCollider.enabled = false;
+            agent.isStopped = true;
+            rb.angularVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
+
+            //this.enabled = false;
+
+        }
+
         if (target == null)
         {
-            target = GameObject.FindWithTag("Player");
+            target = GameObject.FindWithTag("Player").GetComponent<Transform>();
         }
         if (IsAggrevated() && !isAttacking && !health.isDead)
         {
             MoveTo();
         }
-        else if (health.isDead)
+
+        else if (!health.isDead)
         {
-            agent.enabled = false;
-            rb.angularVelocity = Vector3.zero;
-            rb.velocity = Vector3.zero;
-            rb.useGravity = false;
-            collider.enabled = false;
-        }
-        else
-        {
-            agent.isStopped = true;
+
             rb.angularVelocity = Vector3.zero;
             //transform.rotation = Quaternion.LookRotation(transform.forward);
         }
-        
-        
-
-
 
         UpdateAnimator();
     }
+
+
 
     public void Hit()
     {
@@ -114,10 +163,12 @@ public class EnemyAI : MonoBehaviour
         return DistanceWithPlayer < chaseDistance;
     }
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.red;
 
-    //    Gizmos.DrawWireSphere(this.transform.position, chaseDistance);
-    //}
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireSphere(this.transform.position, chaseDistance);
+    }
 }

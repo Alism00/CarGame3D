@@ -15,12 +15,18 @@ public class Combat : MonoBehaviour
     {
 
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.CompareTag("Zombie"))
         {
             other.transform.GetComponent<Health>().Death();
-            
+
         }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+
     }
 }
